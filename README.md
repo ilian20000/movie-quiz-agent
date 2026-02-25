@@ -39,4 +39,3 @@ pip install -r requirements.txt
  - 1 agent meneur de jeu
      - Spicyness de l'IA
 
-
