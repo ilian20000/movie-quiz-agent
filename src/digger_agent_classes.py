@@ -20,9 +20,11 @@ class RandomInput(BaseModel):
 def randomTool(strList: List[str]) -> str:
     """Perform a random choice in a list of string"""
 
-    print("tool call to random on : ")
     return random.choice(strList)
 
+class GameQuestion(BaseModel):
+    enigma: str = Field(description="The question")
+    answer: str = Field(description="The correct answer expected (title of the film or precise information)")
 
 class Artworks_Informations(BaseModel):
     """General Informations about a bunch of artwork"""
