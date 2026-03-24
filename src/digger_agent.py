@@ -1,11 +1,3 @@
-"""
-DICT QUERY PARAMETERS :
-{
-    difficulty: float, (min= 0, max= 1)
-    preferences: [str], (genres imdb, langage, etc...)
-    game_mode: str, (pitch des règles actuelles du jeu)
-}
-"""
 
 import os
 import requests
@@ -18,8 +10,19 @@ from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from pydantic import BaseModel, Field
-
 from digger_agent_classes import *
+
+"""
+DICT QUERY PARAMETERS :
+{
+    difficulty: float, (min= 0, max= 1)
+    preferences: [str], (genres imdb, langage, etc...)
+    game_mode: str, (pitch des règles actuelles du jeu)
+}
+"""
+
+
+
 
 load_dotenv()
 
@@ -126,3 +129,128 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+    
+
+
+# class MovieInput(BaseModel):
+#     """Input for calculator."""
+#     expression: str = Field(description="The parameters to ask for a movie")
+
+# @tool(args_schema=MovieInput)
+# def movie_query(expression: str) -> str:
+#     """Get informations about a movie following the input criterias"""
+#     movies = [ 
+#         {
+#         "name": "Inception",
+#         "genre": "Sci-Fi",
+#         "synopsis": "Un voleur qui s'approprie des secrets d'entreprise à l'aide d'une technique de partage de rêves se voit contraint d'effectuer la tâche inverse : implanter une idée dans l'esprit d'un PDG, pour revoir ses enfants."
+#     },
+#         {
+#         "name": "LaLaLand",
+#         "genre": "Comédie musicale",
+#         "synopsis": "Tout en naviguant dans leurs carrières à Los Angeles, un pianiste et une actrice tombent amoureux tout en essayant de concilier leurs aspirations pour l'avenir."
+#     },
+#         {
+#         "name": "Django Unchained",
+#         "genre": "Comédie",
+#         "synopsis": "Avec l'aide d'un chasseur de primes allemand, un esclave affranchi tente de sauver sa femme du violent propriétaire d'une plantation du Mississippi."
+#     }
+#     #     {
+#     #     "name": "",
+#     #     "genre": "",
+#     #     "synopsis": ""
+#     # },
+#     ]
+
+#     index_movie = random.randint(len(movies))
+#     return movies[index_movie]["synopsis"]
+
+    
+# def main():
+#     load_dotenv()
+#     temp = 2
+#     model = ChatOpenAI(
+#         model=os.getenv("AI_MODEL"),
+#         base_url=os.getenv("AI_ENDPOINT"),
+#         api_key=os.getenv("AI_API_KEY"),
+#         temperature= temp
+# )
+
+#     structured_model = model.with_structured_output(Artworks_Informations)
+
+#     prompt = """
+#     Un film de science fiction
+#     """
+#     options = get_structured_api_options(structured_model, prompt)
+
+#     data = fetch_imdb_data(options)
+#     artwork = choose_artwork(data)
+#     print(artwork)
+
+#     response = get_info(model, artwork)
+
+#     return response
+
+# def main():
+#     param = {
+#         "difficulty" : 0.0,
+#         "preferences" : [],
+#         "game_mode" : "Find a info about the date of a film"
+#     }
+#     query_infos(param)
+
+
+# if __name__ == "__main__":
+#     main()
+
+
+#     # Examples of code → comment pairs
+#     examples = [
+#         {
+#             "code": "total = sum(numbers)",
+#             "comment": "# Calculates the sum of all numbers in the list",
+#         },
+#         {
+#             "code": "users = [u for u in data if u.active]",
+#             "comment": "# Filters the data list to only include active users",
+#         },
+#         {
+#             "code": "db.save(record)",
+#             "comment": "# Saves the record to the database",
+#         },
+#     ]
+
+#     example_template = ChatPromptTemplate.from_messages(
+#         [
+#             ("human", "Code: {code}"),
+#             ("ai", "{comment}"),
+#         ]
+#     )
+
+#     few_shot_template = FewShotChatMessagePromptTemplate(
+#         example_prompt=example_template,
+#         examples=examples,
+#     )
+
+#     final_template = ChatPromptTemplate.from_messages(
+#         [
+#             (
+#                 "system",
+#                 "Generate clear, concise comments for code based on these examples:",
+#             ),
+#             few_shot_template,
+#             ("human", "Code: {code}"),
+#         ]
+#     )
+#     agent = create_agent(model, tools=[movie_query])
+
+#     query = "Give me a funny movie synopsis"
+
+#     response = agent.invoke({"messages": [HumanMessage(content=query)]})
+#     last_message = response["messages"][-1]
+#     print(f" Agent: {last_message.content}\n")
+
+# if __name__ == "__main__":
+#     main()
