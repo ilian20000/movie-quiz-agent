@@ -20,6 +20,7 @@ class RandomInput(BaseModel):
 def randomTool(strList: List[str]) -> str:
     """Perform a random choice in a list of string"""
 
+    
     return random.choice(strList)
 
 class GameQuestion(BaseModel):

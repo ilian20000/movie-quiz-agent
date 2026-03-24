@@ -3,7 +3,7 @@ DICT QUERY PARAMETERS :
 {
     difficulty: float, (min= 0, max= 1)
     preferences: [str], (genres imdb, langage, etc...)
-    game_mode: str, (pitch des règles actuelles du jeu)
+    game_mode: str, (type de questions posées : date, actors, director, etc)
 }
 """
 
@@ -28,10 +28,10 @@ from digger_agent_classes import *
 
 load_dotenv()
 
+"""Giving a list of options in the imdbapi format, return the response to the https call"""
 def fetch_imdb_data(options : dict):
     url = "https://api.imdbapi.dev/titles"
-    if(len(options) > 0):
-        url += "?"
+    url += "?"
     for opt in options.keys():
         if isinstance(options[opt], list):
             if len(options[opt]) > 0:
@@ -40,6 +40,7 @@ def fetch_imdb_data(options : dict):
         else:
             url += opt + "=" + options[opt] + "&"
     url += "&languageCodes=fr"
+    url += "&sortBy=SORT_BY_USER_RATING_COUNT&sortOrder=DESC"
     print("API call to Imdb : ", url)
     response = requests.get(url)
     data = response.json()
@@ -57,21 +58,20 @@ def get_structured_api_options(model, prompt):
 
     return result1.model_dump()
 
-"""Take a response of an api call
-Return the full description of a film"""
-def choose_artwork(data):
+"""Take a response of an imdbapi https call
+Return a pair with : 
+- the full description of a film, taking into account the difficulty
+- the new difficulty"""
+def choose_artwork(data, difficulty):
     choice = random.choice(data["titles"])
     url = "https://api.imdbapi.dev/titles/" + choice["id"]
     print("API call to Imdb : ", url)
     response = requests.get(url)
     data = response.json()
 
-    #url += "/akas"
-    #for 
-
     return data
 
-def get_info(model, data):
+def get_info(model, data, parameters):
     filtered_data = {
         "type" : data["type"],
         "title" : data["primaryTitle"],
@@ -79,7 +79,7 @@ def get_info(model, data):
         "genres" : data["genres"],
         "plot" : data["plot"],
         "director" : [direct["displayName"] for direct in data["directors"]],
-        "writers" : [writ["displayName"] for writ in data["writers"]],
+        #"writers" : [writ["displayName"] for writ in data["writers"]],
         "actors" : [star["displayName"] for star in data["stars"]],
         "originCountries" : data["originCountries"],
     }
@@ -106,14 +106,15 @@ def get_info(model, data):
     RULES:
     1. THE QUESTION: Must be short (max 20 words) but MUST include specific clues from the context (like actors or genre) so the user can actually guess.
     2. DIFFICULTY RULES:
-        More the difficulty is low (0.0) give clues such as the name of the work, the year of the director
-        More the difficulty is high (1.0) give clues such as the plot, the period, specific fact about the work
+        0. If a game mode is specified then ask a question according to the game mode, and when the difficulty (0.0 to 1.0) is high give less details
+        1. From 0.0 to 0.2 ask question about the name of the artwork, and give clues such as the name or the director, actors and the date.
+        2. From 0.2 to 0.4 ask question about the director of the artwork, and give clues such as the name, actors and the date.
+        3. From 0.4 to 0.6 ask question about the actors of the artwork, and give clues such as the name, director and the date.
+        4. From 0.6 to 0.8 ask question about the date of the artwork, and give only the name of the artwork.
+        5. From 0.8 to 1.0 ask question about the director of the artwork, and give only the plot of the artwork.
     4. THE ANSWER: Just the facts (name, year, or person).
     5. ANSWER Subject : Directors, Year, writters, actors
     """
-
-    parameters = {"game_mode" : "work name",
-                  "difficulty" : 0.0}
 
     user_request = f"""
     CONTEXTE : {context}
@@ -123,14 +124,19 @@ def get_info(model, data):
     Generate the question and the corresponding answer.
     """
 
+    agent = create_agent(model, tools=[randomTool])
+
     messages_agent = [
         SystemMessage(content=GENERATOR_PROMPT),
         HumanMessage(content=user_request),
     ]
 
+    response = agent.invoke({"messages": messages_agent})
+    last_message = response["messages"][-1].content
+
     structured_gen = model.with_structured_output(GameQuestion)
 
-    result = structured_gen.invoke(messages_agent)
+    result = structured_gen.invoke(last_message)
         
     return result
 
@@ -143,23 +149,21 @@ def query_infos(parameters):
 
     structured_model = model.with_structured_output(Artworks_Informations)
 
-    prompt = """
-    A animated movie
-    """
-    options = get_structured_api_options(structured_model, prompt)
+    options = get_structured_api_options(structured_model, parameters["preferences"])
 
     data = fetch_imdb_data(options)
-    artwork = choose_artwork(data)
+    print(len(data["titles"]))
+    #artwork = choose_artwork(data)
 
-    response = get_info(model, artwork)
-
-    return response
+    #response = get_info(model, artwork, parameters)
+    return 0
+    #return response
 
 def main():
     param = {
         "difficulty" : 0.0,
-        "preferences" : [],
-        "game_mode" : "Find a info about the date of a film"
+        "preferences" : "action movie",
+        "game_mode" : ""
     }
     info = query_infos(param)
 
