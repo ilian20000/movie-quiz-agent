@@ -2,7 +2,7 @@
 DICT QUERY PARAMETERS :
 {
     difficulty: float, (min= 0, max= 1)
-    preferences: [str], (genres imdb, langage, etc...)
+    preferences: str, (genres imdb, langage, etc...)
     game_mode: str, (type de questions posées : date, actors, director, etc)
 }
 """
@@ -152,12 +152,11 @@ def query_infos(parameters):
     options = get_structured_api_options(structured_model, parameters["preferences"])
 
     data = fetch_imdb_data(options)
-    print(len(data["titles"]))
-    #artwork = choose_artwork(data)
+    artwork = choose_artwork(data)
 
-    #response = get_info(model, artwork, parameters)
-    return 0
-    #return response
+    response = get_info(model, artwork, parameters)
+    
+    return response
 
 def main():
     param = {
