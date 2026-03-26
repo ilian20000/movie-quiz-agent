@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from typing import List, Literal
 from enum import Enum
 import sys
+
 class RandomInput(BaseModel):
     """Input for random choice in a list of string"""
 
@@ -20,14 +21,13 @@ class RandomInput(BaseModel):
 def randomTool(strList: List[str]) -> str:
     """Perform a random choice in a list of string"""
 
-    
     return random.choice(strList)
 
 class GameQuestion(BaseModel):
     enigma: str = Field(description="The question")
     answer: str = Field(description="The correct answer expected (title of the film or precise information)")
 
-class Artworks_Informations(BaseModel):
+class ArtworksInformations(BaseModel):
     """General Informations about a bunch of artwork"""
 
     types : List[Literal[ "MOVIE", "TV_SERIES", "TV_MINI_SERIES", "TV_SPECIAL", "TV_MOVIE", "SHORT", "VIDEO", "VIDEO_GAME"]] = Field(description="The list of artworks types, empty if none are specified")
@@ -36,3 +36,14 @@ class Artworks_Informations(BaseModel):
     #languageCodes : str = Field(description="The ISO 639-1 or ISO 639-2 code of countries artworks came from, put only one in the list if there is the choici between several, empty if none are specified")
     startYear: str = Field(description="The lower limit for artworks creation year, put 1800 if there is no upper limit")
     endYear: str = Field(description="The upper limit for artworks creation year, put 2100 if there is no upper limit")
+
+class AnswerValidation(BaseModel):
+    validation: bool = Field(description="Is the user's answer is considered valid")
+    answer: str = Field(description="Tells how good the answer was, then introduces the next question")
+
+
+class State(Enum):
+    NULL = 0
+    ANSWER = 1
+    CONFIGURE = 2
+    

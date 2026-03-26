@@ -5,6 +5,12 @@ langchain>=1.1.0
 langchain-azure-ai>=1.0.4
 langchain-mcp-adapters>=0.1.14
 langchain-text-splitters
+langchain_community
+
+docarray
+
+# Web app
+flask
 
 # Utilities
 python-dotenv>=1.2.1

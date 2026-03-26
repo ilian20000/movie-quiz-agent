@@ -1,0 +1,210 @@
+/* --- Variables pour les couleurs --- */
+:root {
+    --deep-night-blue: #020712; /* Bleu nuit très profond */
+    --rich-black: #010308;        /* Presque noir pour les dégradés */
+    --hollywood-gold: #f1c40f;   /* Jaune doré pour les accents */
+    --pure-white: #ffffff;
+    --text-muted: #bdc3c7;
+}
+
+/* --- Reset & Base --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif; /* Police par défaut */
+    background-color: var(--deep-night-blue);
+    /* Dégradé léger pour donner de la profondeur */
+    background-image: radial-gradient(circle at center, #0a1128 0%, var(--rich-black) 100%);
+    color: var(--pure-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.main-wrapper {
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* --- Titre GROS et CINÉMA --- */
+.cinema-title {
+    font-family: 'Bebas Neue', sans-serif; /* Police Cinéma Impact */
+    font-size: 5.5rem; /* Très gros */
+    letter-spacing: 4px; /* Espacement des lettres typique des affiches */
+    color: var(--pure-white);
+    margin-bottom: 0.5rem;
+    /* Petit effet de lueur subtile */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive pour le gros titre */
+@media (max-width: 600px) {
+    .cinema-title { font-size: 3.5rem; }
+}
+
+.tagline {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 4rem;
+}
+
+/* --- Zone Bouton --- */
+.action-box {
+    margin: 3rem 0;
+}
+
+/* --- Le Bouton "Play" --- */
+.btn-play {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif; /* Police Cinéma aussi sur le bouton */
+    font-size: 2rem;
+    letter-spacing: 2px;
+    background-color: transparent;
+    color: var(--hollywood-gold);
+    border: 3px solid var(--hollywood-gold);
+    padding: 18px 60px;
+    text-decoration: none;
+    border-radius: 5px; /* Bordures plus carrées, style ticket */
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Effet au survol */
+.btn-play:hover {
+    background-color: var(--hollywood-gold);
+    color: var(--deep-night-blue);
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.6);
+    transform: translateY(-3px);
+}
+
+/* --- Footer --- */
+.cinema-footer {
+    margin-top: 5rem;
+    font-size: 0.9rem;
+    color: #4a5568; /* Très discret */
+}
+
+/* --- Mode Jeu : Layout Full Screen --- */
+.game-body {
+    height: 100vh;
+    overflow: hidden; /* Empêche la page entière de scroller */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--deep-night-blue);
+}
+
+.chat-interface {
+    width: 100%;
+    max-width: 900px;
+    height: 95vh; /* Presque toute la hauteur */
+    display: flex;
+    flex-direction: column;
+    background: rgba(1, 3, 8, 0.8);
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+/* --- Header du Chat --- */
+.chat-header {
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.agent-name { font-family: 'Bebas Neue'; color: var(--hollywood-gold); letter-spacing: 1px; }
+.back-link { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; }
+
+/* --- Zone de Discussion (Scrollable) --- */
+.chat-history {
+    flex: 1; /* Prend tout l'espace disponible */
+    overflow-y: auto; /* Active le scroll vertical */
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Style des Bulles */
+.message {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--hollywood-gold);
+}
+
+.auto-message {
+    align-self: flex-start;
+    background: rgba(0, 0, 0, 0.05);
+    border-left: 3px solid var(--muted);
+}
+
+.user-message {
+    align-self: flex-end;
+    background: var(--hollywood-gold);
+    color: var(--deep-night-blue);
+    font-weight: bold;
+}
+
+.sender-name {
+    display: block;
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* --- Barre d'entrée (Fixée en bas) --- */
+.chat-input-area {
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#userInput {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+    font-family: 'Montserrat';
+}
+
+#userInput:focus {
+    outline: none;
+    border-color: var(--hollywood-gold);
+}
+
+.btn-send {
+    font-family: 'Bebas Neue';
+    background: var(--hollywood-gold);
+    border: none;
+    padding: 0 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}

@@ -39,3 +39,12 @@ pip install -r requirements.txt
  - 1 agent meneur de jeu
      - Spicyness de l'IA
 
+## Derniers ajouts Ilian
+ - Comparer la réponse à celle de l'user et estimer si c'est juste, incrémenter le score
+ - Réduire les textes inutiles pour améliorer la présentation
+ - Envoie difficulté, preferences et gamemode (peut etre vide) à l'intro du jeu
+ - Récupère une game question, puis passe à la suivante
+ - Frontend flask template de chatbot, avoir une bulle mise en forme pour afficher les objets spéciaux type GameQuestion
+
+ - Mettre en place un reset partiel de mémoire pour recommencer une partie
+ - Afficher le score final

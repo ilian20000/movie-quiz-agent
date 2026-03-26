@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Quiz Agent</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <header class="hero-header">
+            <h1 class="cinema-title">MOVIE QUIZ AGENT</h1>
+            <p class="tagline">Silence... Moteur... Action ! Testez votre culture ciné.</p>
+        </header>
+
+        <main class="quiz-section">
+            <div class="action-box">
+                <a href="{{ url_for('game') }}" class="btn-play">
+                    COMMENCER L'AVENTURE
+                </a>
+            </div>
+        </main>
+
+        <footer class="cinema-footer">
+            <p>&copy; 2026 - Paul Enjalbert & Ilian Ben Amar</p>
+        </footer>
+    </div>
+
+</body>
+</html>

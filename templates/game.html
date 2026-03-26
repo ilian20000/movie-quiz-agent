@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion avec l'Agent - Movie Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="game-body">
+
+    <div class="chat-interface">
+        <header class="chat-header">
+            <a href="{{ url_for('index') }}" class="back-link">← Quitter</a>
+            <h2 class="agent-name">AGENT CINÉMA</h2>
+        </header>
+
+        <main class="chat-history" id="chatHistory">
+            {% for msg in history %}
+            <div class="message {{ msg.class }}">
+                <span class="sender-name">{{ msg.sender }} :</span>
+                <p>{{ msg.text }}</p>
+            </div>
+            {% endfor %}
+        </main>
+
+        <footer class="chat-input-area">
+            <form id="chatForm" class="input-container">
+                <input type="text" id="userInput" placeholder="Répondez à l'agent ici..." autocomplete="off" required>
+                <button type="submit" class="btn-send">ENVOYER</button>
+            </form>
+        </footer>
+    </div>
+
+
+<script>
+    const chatForm = document.getElementById('chatForm');
+    const chatHistory = document.getElementById('chatHistory');
+    const userInput = document.getElementById('userInput');
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Empêche le rechargement de la page
+        
+        const message = userInput.value;
+        if (!message) return;
+
+        // 1. Ajouter la bulle de l'utilisateur localement
+        addMessage(message, 'user-message', 'Vous');
+        userInput.value = ''; // Vide le champ
+
+        // 2. Envoyer le message à Flask
+        fetch('/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 3. Ajouter la réponse de l'IA
+            data.forEach(msg => {
+                // On utilise 'ai-message' car ce sont les réponses de l'agent
+                addMessage(msg.text, 'ai-message', msg.sender);        
+            });
+        });
+    });
+
+    function addMessage(text, className, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', className);
+        msgDiv.innerHTML = `<span class="sender-name">${sender} :</span><p>${text}</p>`;
+        chatHistory.appendChild(msgDiv);
+        
+        // Scroll automatique vers le bas
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

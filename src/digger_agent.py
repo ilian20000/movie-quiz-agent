@@ -24,7 +24,7 @@ from langchain_community.vectorstores import DocArrayInMemorySearch
 from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from digger_agent_classes import *
+from src.agent_classes import *
 
 load_dotenv()
 
@@ -147,12 +147,12 @@ def query_infos(parameters):
         api_key=os.getenv("AI_API_KEY"),
     )
 
-    structured_model = model.with_structured_output(Artworks_Informations)
+    structured_model = model.with_structured_output(ArtworksInformations)
 
     options = get_structured_api_options(structured_model, parameters["preferences"])
 
     data = fetch_imdb_data(options)
-    artwork = choose_artwork(data)
+    artwork = choose_artwork(data, parameters["difficulty"])
 
     response = get_info(model, artwork, parameters)
     
