@@ -42,6 +42,7 @@ class AnswerValidation(BaseModel):
     answer: str = Field(description="Tells how good the answer was, then introduces the next question")
 
 
+
 class State(Enum):
     NULL = 0
     ANSWER = 1

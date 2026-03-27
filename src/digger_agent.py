@@ -3,7 +3,7 @@ DICT QUERY PARAMETERS :
 {
     difficulty: float, (min= 0, max= 1)
     preferences: str, (genres imdb, langage, etc...)
-    game_mode: str, (type de questions posées : date, actors, director, etc)
+    game_mode: str, (subject of question : date, actors, director, etc)
 }
 """
 
@@ -71,6 +71,7 @@ def choose_artwork(data, difficulty):
 
     return data
 
+"""From imdb movie data give the question according to parameters"""
 def get_info(model, data, parameters):
     filtered_data = {
         "type" : data["type"],
@@ -140,6 +141,7 @@ def get_info(model, data, parameters):
         
     return result
 
+"""Main functions, take the parameters of the question and give the question"""
 def query_infos(parameters):
     model = ChatOpenAI(
         model=os.getenv("AI_MODEL"),
