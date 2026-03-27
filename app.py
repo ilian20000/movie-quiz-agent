@@ -52,7 +52,8 @@ def ask():
     if(state == State.CONFIGURE.value):
         theme = get_game_preferences(user_text)
         if(theme):
-            session["param"]["preferences"] = user_text
+            session["param"]["preferences"] = theme
+            print(f"Chosen theme : {theme}")
         session["state"] = State.ANSWER.value
     if(state == State.ANSWER.value):
         # txt1 = f"L'agent a reçu : {user_text}"
